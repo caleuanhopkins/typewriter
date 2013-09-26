@@ -38,6 +38,16 @@ Manual Install
 
 <a href="http://whatismarkdown.com" target="_blank">whatismarkdown.com</a>
 
+= Do I have to convert my HTML content? =
+
+No. You can still use normal HTML in your posts and pages. Markdown will simply ignore the HTML and only parse
+any Markdown specific code that it finds.
+
+= What happens to my content if I deactivate the plugin? =
+
+Unfortunaetly your content will not be parsed by MarkdownExtra anymore and will appear like it does in the text
+editor. In this case you would need to convert your Markdown content to normal HTML.
+
 == Screenshots ==
 
 1. Markdown editor with some example content

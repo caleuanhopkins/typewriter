@@ -18,6 +18,7 @@ class Dev7Typewriter {
     {	
         $this->plugin_path = plugin_dir_path( __FILE__ );
         $this->plugin_url = plugin_dir_url( __FILE__ );
+        register_activation_hook( __FILE__, array(&$this, 'activate') );
         
         add_action( 'plugins_loaded', array(&$this, 'init') );
         add_action( 'profile_update', array(&$this, 'disable_rich_editing') );
@@ -36,12 +37,18 @@ class Dev7Typewriter {
 		add_filter( 'the_excerpt', array(&$this, 'do_markdown') );
     }
     
+    function activate( $network_wide ) {
+        $this->disable_rich_editing();
+    }
+    
     function init() {
         load_plugin_textdomain( 'dev7-typewriter', false, dirname( plugin_basename( __FILE__ ) ) . '/lang' );
     }
     
 	function disable_rich_editing() {
-		update_user_option( get_current_user_id(), 'rich_editing', 'false', true );
+		//update_user_option( get_current_user_id(), 'rich_editing', 'false', true );
+		global $wpdb;
+		$wpdb->query( "UPDATE `" . $wpdb->prefix . "usermeta` SET `meta_value` = 'false' WHERE `meta_key` = 'rich_editing'" );
 	}
 	
 	function quicktags_settings( $qtInit ) {
@@ -87,7 +94,7 @@ class Dev7Typewriter {
 	function do_markdown( $content ) {
 		if( !class_exists( 'Michelf\MarkdownExtra' ) ){
 			spl_autoload_register(function( $class ){
-				require_once $this->plugin_path .'includes/markdown/'. preg_replace('{\\\\|_(?!.*\\\\)}', DIRECTORY_SEPARATOR, ltrim($class, '\\')).'.php';
+				require_once plugin_dir_path( __FILE__ ) .'/includes/markdown/'. preg_replace('{\\\\|_(?!.*\\\\)}', DIRECTORY_SEPARATOR, ltrim($class, '\\')).'.php';
 			});
 		}
 		
