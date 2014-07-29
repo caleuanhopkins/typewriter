@@ -92,13 +92,11 @@ class Dev7Typewriter {
 	}
 	
 	function do_markdown( $content ) {
-		if( !class_exists( 'Michelf\MarkdownExtra' ) ){
-			spl_autoload_register(function( $class ){
-				require_once plugin_dir_path( __FILE__ ) .'/includes/markdown/'. preg_replace('{\\\\|_(?!.*\\\\)}', DIRECTORY_SEPARATOR, ltrim($class, '\\')).'.php';
-			});
+		if( !class_exists( 'Michelf\Markdown' ) ){
+			require_once plugin_dir_path( __FILE__ ) .'/includes/markdown/Michelf/Markdown.php'
 		}
 		
-		return Michelf\MarkdownExtra::defaultTransform( $content );
+		return Michelf\Markdown::defaultTransform( $content );
 	}
 
 }
